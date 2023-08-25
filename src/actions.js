@@ -1,15 +1,16 @@
 import Person from "./classes/person";
-import { People, currentYear } from "./main";
+import { People, currentYear, statistics } from "./main";
 import Parameters from "./parameters";
 
-export const announceEvent = (type, eventDescription) => {
+export const announceEvent = (type, object) => {
   //   console.log(eventDescription);
   var app = document.getElementById("app");
   var p = document.createElement("p");
   var b = document.createElement("b");
   b.textContent = type + " : ";
   var span = document.createElement("span");
-  span.textContent = eventDescription;
+  span.textContent = JSON.stringify({ ...object });
+
   p.appendChild(b);
   p.appendChild(span);
   app.appendChild(p);
@@ -31,28 +32,23 @@ export const marryBetweenPeople = () => {
       Math.random() < Parameters.probabilityOfMarriageEachYear
     ) {
       var bride = People.find(
-        (person) =>
-          person.wives.length === 0 &&
-          person.gender !== groom.gender &&
-          Math.abs(person.birthYear - groom.birthYear) < 15
+        (girl) =>
+          girl.gender !== groom.gender &&
+          girl.wives.length === 0 &&
+          Math.abs(girl.birthYear - groom.birthYear) < 15
       );
       if (bride) {
         groom.marry(bride);
-        // add to to their memories
-        groom.addAHappyMoment("marriage", "self");
-        bride.addAHappyMoment("marriage", "self");
+        announceEvent("marriage", {
+          man: groom.firstName,
+          age: currentYear - groom.birthYear,
+          woman: bride.firstName,
+          age: currentYear - bride.birthYear,
+        });
+        bride.lastName = groom.lastName; // change surname
 
-        // action for this event
-        announceEvent(
-          "Marriage",
-          `${groom.firstName} ${groom.lastName} (${
-            currentYear - groom.birthYear
-          }) + ${bride.firstName} ${bride.lastName} (${
-            currentYear - bride.birthYear
-          })`
-        );
-        //  surname change after marriage
-        bride.lastName = groom.lastName;
+        statistics.marriageThisYear++;
+        statistics.marriageTotal++;
       }
     }
   });
@@ -60,35 +56,57 @@ export const marryBetweenPeople = () => {
 
 export const makeBabiesToCouples = () => {
   People.forEach((man) => {
-    const marriage = man.events.happy.findLast(
-      (he) => he.type === "marriage" && he.on === "self"
-    );
-    var spouse = marriage ? People.find((p) => p.id === man.wives[0].id) : null;
-    if (
-      marriage &&
-      spouse &&
-      Math.random() < Parameters.probabilityOfHavingBabyEachYear
-    ) {
-      const baby = new Person(
-        man.lastName,
-        { id: man.id, alive: true },
-        { id: spouse.id, alive: true },
-        true
-      );
-      People.push(baby);
-      // add children
-      // add to to their memories
-      man.addAHappyMoment("baby", "self");
-      spouse.addAHappyMoment("baby", "self");
-      // action for this event
-      announceEvent(
-        "New born",
-        `${man.firstName} ${man.lastName} (${currentYear - man.birthYear}) + ${
-          spouse.firstName
-        } ${spouse.lastName} (${currentYear - spouse.birthYear}) -> ${
-          baby.firstName
-        } ${baby.lastName}`
-      );
+    const wife = man.wives[0];
+    if (man.gender === "male" && wife) {
+      var spouse = People.find((she) => she.id === wife.id);
+      if (
+        wife &&
+        spouse &&
+        Math.random() < Parameters.probabilityOfHavingBabyEachYear
+      ) {
+        const baby = man.haveBaby(spouse, currentYear);
+        People.push(baby);
+        announceEvent("new-child", {
+          man: man.firstName,
+          age: currentYear - man.birthYear,
+          woman: spouse.firstName,
+          age: currentYear - spouse.birthYear,
+          baby: baby.firstName,
+        });
+
+        statistics.newBornThisYear++;
+        statistics.newBorTotal++;
+      }
     }
   });
+};
+
+export const updateStatistics = () => {
+  People.forEach((person) => {
+    if (person.alive) {
+      statistics.population++;
+      person.gender === "male" ? statistics.male++ : statistics.female++;
+      const age = currentYear - person.birthYear;
+      age < 18
+        ? statistics.under18++
+        : age > 60
+        ? statistics.above60++
+        : statistics.adult18to60++;
+      // marriageThisYear;
+      // marriageTotal;
+      // newBornThisYear;
+      // newBorTotal;
+    }
+  });
+};
+
+export const resetStatistics = () => {
+  statistics.population = 0;
+  statistics.male = 0;
+  statistics.female = 0;
+  statistics.under18 = 0;
+  statistics.adult18to60 = 0;
+  statistics.above60 = 0;
+  statistics.marriageThisYear = 0;
+  statistics.newBornThisYear = 0;
 };

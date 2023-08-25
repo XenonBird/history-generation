@@ -13,81 +13,64 @@ import { currentYear } from "../main";
 
 class Person {
   constructor(
-    lastName = randomLastName(),
     father = { id: 0, alive: Math.round(Math.random()) === 1 },
     mother = { id: 0, alive: Math.round(Math.random()) === 1 },
-    bornThisYear = false,
-    goals = "",
-    birthYear = bornThisYear ? currentYear : randomBirthYear(currentYear),
-    id = random(1000000),
-    gender = randomGender(),
-    firstName = randomFirstName(gender),
-    wives = [],
-    wealth = random(3000),
-    healthLevel = 10 - randomNumberBiasedToLowerUnder10(),
-    socialStatus = randomNumberBiasedToLowerUnder10(),
-    educationLevel = randomNumberBiasedToLowerUnder10(),
-    educationOn = randomWorks(4),
-    qualities = {
-      positive: randomPositiveQualities(4),
-      negative: randomNegativeQualities(2),
-    },
-    occupation = educationOn[0],
-    identities = [],
-    events = { happy: [], sad: [] },
-    friends = [],
-    enemies = [],
-    happyOn = [],
-    angryOn = []
+    birthYear = randomBirthYear(currentYear),
+    goals = ""
   ) {
-    this.id = id;
-    this.gender = gender;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.id = random(1000000, 100); // under 100 id s are reserved
     this.father = father;
     this.mother = mother;
+    this.gender = randomGender();
+    this.firstName = randomFirstName(this.gender);
+    this.lastName = this.father.lastName || randomLastName();
     this.birthYear = birthYear;
-    this.wives = wives;
-    this.wealth = wealth;
-    this.educationLevel = educationLevel;
-    this.educationOn = educationOn;
-    this.hobbies = educationOn;
-    this.skills = educationOn;
-    this.qualities = qualities;
-    this.occupation = occupation;
-    this.socialStatus = socialStatus;
-    this.healthLevel = healthLevel;
-    this.identities = identities;
-    this.events = events;
+    this.wives = [];
+    this.children = [];
+    this.wealth = random(3000);
+    this.educationLevel = randomNumberBiasedToLowerUnder10();
+    this.educationOn = randomWorks(4);
+    this.hobbies = this.educationOn;
+    this.skills = this.educationOn;
+    this.qualities = {
+      positive: randomPositiveQualities(4),
+      negative: randomNegativeQualities(2),
+    };
+    this.occupation = this.educationOn[0];
+    this.socialStatus = randomNumberBiasedToLowerUnder10();
+    this.healthLevel = 10 - randomNumberBiasedToLowerUnder10();
+    this.identities = [];
+    this.events = { happy: [], sad: [] };
     this.goals = goals;
-    this.friends = friends;
-    this.enemies = enemies;
-    this.happyOn = happyOn;
-    this.angryOn = angryOn;
+    this.friends = [];
+    this.enemies = [];
+    this.happyOn = [];
+    this.angryOn = [];
+    this.alive = true;
   }
 
-  marry(person) {
-    if (this.gender !== person.gender) {
-      this.wives.push({ id: person.id, alive: true });
-      person.wives.push({ id: this.id, alive: true });
+  addALifeEvent(type, title, on, year = currentYear) {
+    if (type === "happy") {
+      this.events.happy.push({ title, on, year });
     } else {
-      console.log("Same-gender marriage is not supported in this era.");
+      this.events.sad.push({ title, on, year });
     }
   }
 
-  addAHappyMoment(type, on, year = currentYear) {
-    this.events.happy.push({
-      year: currentYear,
-      type: type,
-      on: on,
-    });
+  marry(person) {
+    this.wives.push({ id: person.id, alive: true });
+    person.wives.push({ id: this.id, alive: true });
+    this.addALifeEvent("happy", "marriage", "self");
+    person.addALifeEvent("happy", "marriage", "self");
   }
-  addASadMoment(type, on, year = currentYear) {
-    this.events.sad.push({
-      year: currentYear,
-      type: type,
-      on: on,
-    });
+
+  haveBaby(spouse, year = currentYear) {
+    const baby = new Person(this, spouse, year);
+    this.children.push({ id: baby.id, alive: true });
+    spouse.children.push({ id: baby.id, alive: true });
+    this.addALifeEvent("happy", "baby", "self");
+    spouse.addALifeEvent("happy", "baby", "self");
+    return baby;
   }
 
   describe() {
