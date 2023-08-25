@@ -9,3 +9,5 @@ const Parameters = {
 };
 
 export default Parameters;
+
+Parameters.startingYear;

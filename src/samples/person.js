@@ -1,3 +1,7 @@
+/**
+ * Array of common last names.
+ * @type {string[]}
+ */
 export const lastNames = [
   "smith",
   "johnson",
@@ -51,6 +55,10 @@ export const lastNames = [
   "collins",
 ];
 
+/**
+ * Array of common girl names.
+ * @type {string[]}
+ */
 export const girlNames = [
   "emma",
   "olivia",
@@ -104,6 +112,10 @@ export const girlNames = [
   "victoria",
 ];
 
+/**
+ * Array of common boy names.
+ * @type {string[]}
+ */
 export const boyNames = [
   "muhammad",
   "liam",
@@ -157,6 +169,10 @@ export const boyNames = [
   "alexander",
 ];
 
+/**
+ * Array of common work-related names.
+ * @type {string[]}
+ */
 export const workNames = [
   "archery",
   "fighting",
@@ -174,6 +190,10 @@ export const workNames = [
   "storytelling",
 ];
 
+/**
+ * Array of positive qualities.
+ * @type {string[]}
+ */
 export const positiveQualities = [
   "kind-hearted",
   "compassionate",
@@ -197,6 +217,10 @@ export const positiveQualities = [
   "selfless",
 ];
 
+/**
+ * Array of negative qualities.
+ * @type {string[]}
+ */
 export const negativeQualities = [
   "selfish",
   "dishonest",
@@ -220,6 +244,10 @@ export const negativeQualities = [
   "resentful",
 ];
 
+/**
+ * Array of common life goals.
+ * @type {string[]}
+ */
 export const goals = [
   "wealth",
   "happiness",
@@ -243,6 +271,10 @@ export const goals = [
   "security",
 ];
 
+/**
+ * Array of common places.
+ * @type {string[]}
+ */
 export const places = [
   "London",
   "Paris",

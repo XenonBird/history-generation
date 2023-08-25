@@ -45,32 +45,3 @@ const changeYear = () => {
 for (let i = 0; i < 10; i++) {
   changeYear();
 }
-
-const plot = () => {
-  const app = document.getElementById("app");
-  const table = document.createElement("table");
-  const headingRow = document.createElement("tr");
-  for (const key in People[0]) {
-    const th = document.createElement("th");
-    th.textContent = key;
-    headingRow.appendChild(th);
-  }
-  table.appendChild(headingRow);
-
-  People.forEach((singlePerson) => {
-    const row = document.createElement("tr");
-    for (const key in singlePerson) {
-      const td = document.createElement("td");
-      if (typeof singlePerson[key] === "object") {
-        td.textContent = JSON.stringify(singlePerson[key], null, 2);
-      } else {
-        td.textContent = singlePerson[key];
-      }
-      row.appendChild(td);
-    }
-    table.appendChild(row);
-  });
-
-  app.appendChild(table);
-};
-// plot();

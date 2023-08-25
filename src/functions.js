@@ -8,6 +8,12 @@ import {
   workNames,
 } from "./samples/person";
 
+/**
+ * Gives a random natural number from min to max
+ * @param {Number} max - Upper limit of the number, this will be excluded
+ * @param {Number} min - Lower limit of the number, this will be included
+ * @returns {Number}
+ */
 export const random = (max = 1, min = 0) => {
   const range = Math.random() * (max - min);
   return Math.floor(range + min);
@@ -23,11 +29,20 @@ export const shuffleArray = (array) => {
   return array;
 };
 
+/**
+ * Generates random gender between male and female
+ * @returns {"male" | "female"}
+ */
 export const randomGender = () => {
   const index = Math.random() < Parameters.malePopulationPercentage ? 0 : 1;
   return ["male", "female"][index];
 };
 
+/**
+ * Generates random first name based on gender
+ * @param {"male" | "female"} gender - name will be based on
+ * @returns {String}
+ */
 export const randomFirstName = (gender) => {
   if (!gender) gender = randomGender();
   var fname = "";
@@ -39,11 +54,21 @@ export const randomFirstName = (gender) => {
   return fname;
 };
 
+/**
+ * Generate random last name
+ * @returns {String}
+ */
 export const randomLastName = () => {
   var lname = lastNames[Math.floor(random(girlNames.length))];
   return lname;
 };
 
+/**
+ * Generates random birth year based on current year and age group
+ * @param {Number} thisYear - Current year
+ * @param {"young" | "adult" | "old"} group - which age group the age will be belongs to
+ * @returns {Number}
+ */
 export const randomBirthYear = (thisYear, group = "any") => {
   var age = 0;
   switch (group) {
@@ -62,6 +87,11 @@ export const randomBirthYear = (thisYear, group = "any") => {
   return thisYear - age;
 };
 
+/**
+ * Generate array of random work names, length is based on given number
+ * @param {Number} numberOfWork - Number of works
+ * @returns {Array}
+ */
 export const randomWorks = (numberOfWork = 1) => {
   var arr = [...workNames];
   var personWorks = [];
@@ -75,6 +105,11 @@ export const randomWorks = (numberOfWork = 1) => {
   return personWorks;
 };
 
+/**
+ * Generate array of random positive qualities, length is based on given number
+ * @param {Number} numberOfPositiveQualities - Number of Positive Qualities
+ * @returns {Array}
+ */
 export const randomPositiveQualities = (numberOfPositiveQualities = 1) => {
   var arr = [...positiveQualities];
   var personQualities = [];
@@ -88,6 +123,11 @@ export const randomPositiveQualities = (numberOfPositiveQualities = 1) => {
   return personQualities;
 };
 
+/**
+ * Generate array of random negative qualities, length is based on given number
+ * @param {Number} numberOfNegativeQualities - Number of Negative Qualities
+ * @returns {Array}
+ */
 export const randomNegativeQualities = (numberOfNegativeQualities = 1) => {
   var arr = [...negativeQualities];
   var personQualities = [];
@@ -101,6 +141,10 @@ export const randomNegativeQualities = (numberOfNegativeQualities = 1) => {
   return personQualities;
 };
 
+/**
+ * Generate a random number biased towards lower values and under 10.
+ * @returns {Number} The randomly generated number.
+ */
 export const randomNumberBiasedToLowerUnder10 = () => {
   var x = Math.random();
   if (x < 0.004) return 9;

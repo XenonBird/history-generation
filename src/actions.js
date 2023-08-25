@@ -2,6 +2,9 @@ import Person from "./classes/person";
 import { People, currentYear, statistics } from "./main";
 import Parameters from "./parameters";
 
+/**
+ * Display the give event
+ */
 export const announceEvent = (type, object) => {
   //   console.log(eventDescription);
   var app = document.getElementById("app");
@@ -15,7 +18,10 @@ export const announceEvent = (type, object) => {
   p.appendChild(span);
   app.appendChild(p);
 };
-
+/**
+ * Adds given number of people to the People array
+ * @param {numberOfPeople} numberOfPeople - Number of people
+ */
 export const addPeople = (numberOfPeople = 10) => {
   for (let i = 0; i < numberOfPeople; i++) {
     const person = new Person();
@@ -23,6 +29,9 @@ export const addPeople = (numberOfPeople = 10) => {
   }
 };
 
+/**
+ * Marries between eligible couples with probability
+ */
 export const marryBetweenPeople = () => {
   People.forEach((groom) => {
     if (
@@ -54,6 +63,9 @@ export const marryBetweenPeople = () => {
   });
 };
 
+/**
+ * Adds baby to the married couples with probability
+ */
 export const makeBabiesToCouples = () => {
   People.forEach((man) => {
     const wife = man.wives[0];
@@ -81,6 +93,9 @@ export const makeBabiesToCouples = () => {
   });
 };
 
+/**
+ * Updates statistics for single year
+ */
 export const updateStatistics = () => {
   People.forEach((person) => {
     if (person.alive) {
@@ -100,6 +115,9 @@ export const updateStatistics = () => {
   });
 };
 
+/**
+ * Resets statistics for further usage
+ */
 export const resetStatistics = () => {
   statistics.population = 0;
   statistics.male = 0;
