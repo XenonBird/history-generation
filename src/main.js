@@ -7,6 +7,7 @@ import {
   resetStatistics,
   updateStatistics,
 } from "./actions";
+import { generateUI } from "./ui";
 
 export var currentYear = Parameters.startingYear;
 
@@ -26,22 +27,28 @@ export const statistics = {
   newBorTotal: 0,
 };
 
-addPeople(100);
+/**
+ * Advances the simulation by a specified number of years.
+ *
+ * @param {number} numberOfYears - The number of years to advance the simulation by.
+ */
+const changeYear = (numberOfYears = 1) => {
+  const singleYearChange = () => {
+    resetStatistics();
+    announceEvent("New Year", {
+      massage: `=========================== ${currentYear} ===========================`,
+    });
 
-const changeYear = () => {
-  resetStatistics();
-  announceEvent("New Year", {
-    massage: `=========================== ${currentYear} ===========================`,
-  });
+    marryBetweenPeople();
+    makeBabiesToCouples();
 
-  marryBetweenPeople();
-  makeBabiesToCouples();
-
-  updateStatistics();
-  announceEvent("Statistics ", statistics);
-  currentYear++;
+    updateStatistics();
+    announceEvent("Statistics ", statistics);
+    currentYear++;
+  };
+  for (let i = 0; i < numberOfYears; i++) {
+    singleYearChange();
+  }
 };
 
-for (let i = 0; i < 10; i++) {
-  changeYear();
-}
+generateUI(changeYear);

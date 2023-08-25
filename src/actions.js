@@ -49,10 +49,8 @@ export const marryBetweenPeople = () => {
       if (bride) {
         groom.marry(bride);
         announceEvent("marriage", {
-          man: groom.firstName,
-          age: currentYear - groom.birthYear,
-          woman: bride.firstName,
-          age: currentYear - bride.birthYear,
+          man: { name: groom.firstName, age: currentYear - groom.birthYear },
+          woman: { name: bride.firstName, age2: currentYear - bride.birthYear },
         });
         bride.lastName = groom.lastName; // change surname
 
@@ -79,10 +77,11 @@ export const makeBabiesToCouples = () => {
         const baby = man.haveBaby(spouse, currentYear);
         People.push(baby);
         announceEvent("new-child", {
-          man: man.firstName,
-          age: currentYear - man.birthYear,
-          woman: spouse.firstName,
-          age: currentYear - spouse.birthYear,
+          man: { name: man.firstName, age: currentYear - man.birthYear },
+          woman: {
+            name: spouse.firstName,
+            age2: currentYear - spouse.birthYear,
+          },
           baby: baby.firstName,
         });
 

@@ -1,6 +1,6 @@
 const Parameters = {
   startingYear: 2023,
-  malePopulationPercentage: 0.45, // 45%
+  malePopulationPercentage: 0.5, // 45%
   maxAge: 70, //years
   probabilityOfMarriageEachYear: 0.1, // 5%
   probabilityOfSecondMarriage: 0.001, // 0.1%
