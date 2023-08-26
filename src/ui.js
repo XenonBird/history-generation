@@ -10,7 +10,7 @@ export const generateUI = (changeYearHandler) => {
   const button = document.getElementById("generateButton");
   button.addEventListener("click", () => {
     if (People.length > 0) {
-      console.log("Number of people", People.length);
+      // console.log("Number of people", People.length);
       var s = new Date().getTime();
       changeYearHandler();
       var e = new Date().getTime();

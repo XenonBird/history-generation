@@ -8,16 +8,17 @@ import Parameters from "./parameters";
 export const announceEvent = (type, object) => {
   //   console.log(eventDescription);
   var app = document.getElementById("app");
-  var p = document.createElement("p");
-  var b = document.createElement("b");
-  b.textContent = type + " : ";
-  var span = document.createElement("span");
-  span.textContent = JSON.stringify({ ...object });
+  var div = document.createElement("div");
+  var h4 = document.createElement("h4");
+  h4.textContent = type + " : ";
+  var pre = document.createElement("pre");
+  pre.textContent = JSON.stringify({ ...object }, null, 4);
 
-  p.appendChild(b);
-  p.appendChild(span);
-  app.appendChild(p);
+  div.appendChild(h4);
+  div.appendChild(pre);
+  app.appendChild(div);
 };
+
 /**
  * Adds given number of people to the People array
  * @param {numberOfPeople} numberOfPeople - Number of people
@@ -35,6 +36,7 @@ export const addPeople = (numberOfPeople = 10) => {
 export const marryBetweenPeople = () => {
   People.forEach((groom) => {
     if (
+      groom.alive &&
       groom.gender === "male" &&
       groom.wives.length === 0 && // only one marriage
       currentYear - groom.birthYear >= Parameters.minMarriageAge &&
@@ -42,6 +44,7 @@ export const marryBetweenPeople = () => {
     ) {
       var bride = People.find(
         (girl) =>
+          girl.alive &&
           girl.gender !== groom.gender &&
           girl.wives.length === 0 &&
           Math.abs(girl.birthYear - groom.birthYear) < 15
@@ -67,7 +70,7 @@ export const marryBetweenPeople = () => {
 export const makeBabiesToCouples = () => {
   People.forEach((man) => {
     const wife = man.wives[0];
-    if (man.gender === "male" && wife) {
+    if (man.alive && man.gender === "male" && wife) {
       var spouse = People.find((she) => she.id === wife.id);
       if (
         wife &&
@@ -92,6 +95,23 @@ export const makeBabiesToCouples = () => {
   });
 };
 
+export const makePeoplePassAway = () => {
+  People.forEach((person) => {
+    if (person.alive && Math.random() < Parameters.probabilityOfNaturalDeath) {
+      person.passAway();
+      person.father.alive && person.father.id !== 0;
+      announceEvent("Death", {
+        person: `${person.firstName} ${person.lastName} (${
+          currentYear - person.birthYear
+        })`,
+      });
+
+      statistics.deathThisYear++;
+      statistics.deathTotal++;
+    }
+  });
+};
+
 /**
  * Updates statistics for single year
  */
@@ -112,6 +132,7 @@ export const updateStatistics = () => {
       // newBorTotal;
     }
   });
+  console.log("People", statistics.population);
 };
 
 /**
@@ -126,4 +147,5 @@ export const resetStatistics = () => {
   statistics.above60 = 0;
   statistics.marriageThisYear = 0;
   statistics.newBornThisYear = 0;
+  statistics.deathThisYear = 0;
 };

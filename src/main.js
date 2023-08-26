@@ -1,13 +1,14 @@
 import Parameters from "./parameters";
 import {
-  addPeople,
   announceEvent,
   makeBabiesToCouples,
+  makePeoplePassAway,
   marryBetweenPeople,
   resetStatistics,
   updateStatistics,
 } from "./actions";
 import { generateUI } from "./ui";
+import { random, shuffleArray } from "./functions";
 
 export var currentYear = Parameters.startingYear;
 
@@ -25,6 +26,8 @@ export const statistics = {
   marriageTotal: 0,
   newBornThisYear: 0,
   newBorTotal: 0,
+  deathThisYear: 0,
+  deathTotal: 0,
 };
 
 /**
@@ -39,8 +42,15 @@ const changeYear = (numberOfYears = 1) => {
       massage: `=========================== ${currentYear} ===========================`,
     });
 
+    shuffleArray(People);
     marryBetweenPeople();
     makeBabiesToCouples();
+    makePeoplePassAway();
+
+    announceEvent(
+      "A random person",
+      People.find((p) => currentYear - p.birthYear < 5)
+    );
 
     updateStatistics();
     announceEvent("Statistics ", statistics);

@@ -9,7 +9,7 @@ import {
   randomPositiveQualities,
   randomWorks,
 } from "../functions";
-import { currentYear } from "../main";
+import { People, currentYear } from "../main";
 
 /**
  * Represents an individual in the simulation.
@@ -100,6 +100,37 @@ class Person {
     this.addALifeEvent("happy", "baby", "self");
     spouse.addALifeEvent("happy", "baby", "self");
     return baby;
+  }
+
+  /**
+   * Simulate the natural death of the person.
+   */
+  passAway() {
+    if (this.alive) {
+      this.alive = false;
+
+      if (this.father.alive && this.father.id !== 0) {
+        var father = People.find((person) => person.id === this.father.id);
+        father.addALifeEvent("sad", "death", "son");
+      }
+
+      if (this.mother.alive && this.mother.id !== 0) {
+        var mother = People.find((person) => person.id === this.mother.id);
+        mother.addALifeEvent("sad", "death", "son");
+      }
+
+      if (this.wives[0] && this.wives[0].alive && this.wives[0].id !== 0) {
+        var wife = People.find((person) => person.id === this.wives[0].id);
+        wife.addALifeEvent("sad", "death", "husband");
+      }
+
+      if (this.children.length > 0) {
+        this.children.forEach((childId) => {
+          var child = People.find((person) => person.id === childId);
+          child && child.addALifeEvent("sad", "death", "father");
+        });
+      }
+    }
   }
 
   /**
